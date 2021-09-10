@@ -1,3 +1,5 @@
+part of vi.collection;
+
 class ViNode<K, V> {
   ViNode({required this.key, this.data}) : children = [];
 

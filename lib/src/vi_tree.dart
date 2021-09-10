@@ -1,6 +1,4 @@
-import 'dart:collection';
-
-import 'vi_node.dart';
+part of vi.collection;
 
 class ViTree<K, V> {
   ViTree({required K key, V? data})

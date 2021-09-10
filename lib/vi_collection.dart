@@ -1,4 +1,6 @@
-library vi_collection;
+library vi.collection;
 
-export 'src/vi_node.dart';
-export 'src/vi_tree.dart';
+import 'dart:collection';
+
+part 'src/vi_node.dart';
+part 'src/vi_tree.dart';
