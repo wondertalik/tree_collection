@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vi_collection/vi_collection.dart';
 
 void main() {
-  late ViNode<int, Object?> tRootNode;
+  late ViNode<int, dynamic> tRootNode;
 
   setUp(() {
     tRootNode = ViNode(key: 8)
@@ -21,11 +21,12 @@ void main() {
       ]);
   });
 
-  group('Tree', () {
+  group('OrderedTree', () {
     group('find elements in tree', () {
       test('should return node with key 7', () {
         // arrange
-        final tree = ViTree.fromNode(tRootNode);
+        final tree = ViOrderedTree.fromNode(tRootNode,
+            traversal: ViTraversalBfs<int, dynamic>());
 
         // act
         final result = tree.find(7);
@@ -36,7 +37,8 @@ void main() {
 
       test('should return null', () {
         // arrange
-        final tree = ViTree.fromNode(tRootNode);
+        final tree = ViOrderedTree.fromNode(tRootNode,
+            traversal: ViTraversalBfs<int, dynamic>());
 
         // act
         final result = tree.find(15);
@@ -48,7 +50,8 @@ void main() {
       group('find parent in tree', () {
         test('parent of 14 is 10', () async {
           // arrange
-          final tree = ViTree.fromNode(tRootNode);
+          final tree = ViOrderedTree.fromNode(tRootNode,
+              traversal: ViTraversalBfs<int, dynamic>());
 
           // act
           final result = tree.findParent(14);
@@ -60,7 +63,8 @@ void main() {
 
         test('parent of 13 is 14', () async {
           // arrange
-          final tree = ViTree.fromNode(tRootNode);
+          final tree = ViOrderedTree.fromNode(tRootNode,
+              traversal: ViTraversalBfs<int, dynamic>());
 
           // act
           final result = tree.findParent(13);
@@ -72,7 +76,8 @@ void main() {
 
         test('parent not found', () async {
           // arrange
-          final tree = ViTree.fromNode(tRootNode);
+          final tree = ViOrderedTree.fromNode(tRootNode,
+              traversal: ViTraversalBfs<int, dynamic>());
 
           // act
           final result = tree.findParent(20);
@@ -86,7 +91,8 @@ void main() {
     group('add elements to tree', () {
       test('Add element to tree was success', () async {
         // arrange
-        final tree = ViTree.fromNode(tRootNode);
+        final tree = ViOrderedTree.fromNode(tRootNode,
+            traversal: ViTraversalBfs<int, dynamic>());
 
         // act
         final result = tree.add(toKey: 1, key: 20);
@@ -97,7 +103,8 @@ void main() {
 
       test('Error. No parent to add element to tree', () async {
         // arrange
-        final tree = ViTree.fromNode(tRootNode);
+        final tree = ViOrderedTree.fromNode(tRootNode,
+            traversal: ViTraversalBfs<int, dynamic>());
 
         // act
         final result = tree.add(toKey: 5, key: 20);
@@ -108,7 +115,8 @@ void main() {
 
       test('Error. Key already exist cant add new element', () async {
         // arrange
-        final tree = ViTree.fromNode(tRootNode);
+        final tree = ViOrderedTree.fromNode(tRootNode,
+            traversal: ViTraversalBfs<int, dynamic>());
 
         // act
         final result = tree.add(toKey: 1, key: 3);

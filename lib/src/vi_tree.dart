@@ -1,14 +1,14 @@
 part of vi.collection;
 
-class ViTree<K, V> {
-  ViTree({required K key, V? data})
-      : root = ViNode(key: key, data: data),
+class ViOrderedTree<K, V> {
+  ViOrderedTree({required K key, required this.traversal, V? data})
+      : root = ViNode<K, V>(key: key, data: data),
         keys = <K>{key};
 
-  ViTree.fromNode(ViNode<K, V> node)
+  ViOrderedTree.fromNode(ViNode<K, V> node, {required this.traversal})
       : root = node,
         keys = <K>{} {
-    traverseBFS((node) {
+    traversal.traverse(root, callback: (node) {
       keys.add(node.key);
       return true;
     });
@@ -16,13 +16,14 @@ class ViTree<K, V> {
 
   final ViNode<K, V> root;
   Set<K> keys;
+  ViTraversal<K, V> traversal;
 
   bool add({required K toKey, required K key, V? data}) {
     if (keys.contains(key)) return false;
 
     final parent = find(toKey);
     if (parent != null) {
-      final child = ViNode(key: key, data: data);
+      final child = ViNode<K, V>(key: key, data: data);
       parent.children.add(child);
       keys.add(key);
       return true;
@@ -42,7 +43,7 @@ class ViTree<K, V> {
 
   ViNode<K, V>? find(K key) {
     ViNode<K, V>? element;
-    traverseBFS((node) {
+    traversal.traverse(root, callback: (node) {
       if (node.key == key) {
         element = node;
         return false;
@@ -54,7 +55,7 @@ class ViTree<K, V> {
 
   ViNode<K, V>? findParent(K key) {
     ViNode<K, V>? parent;
-    traverseBFS((node) {
+    traversal.traverse(root, callback: (node) {
       final index = node.children.indexWhere((element) => element.key == key);
       if (index != -1) {
         parent = node;
@@ -63,22 +64,5 @@ class ViTree<K, V> {
       return true;
     });
     return parent;
-  }
-
-  void traverseBFS(bool Function(ViNode<K, V> node) callback) {
-    var queue = ListQueue<ViNode<K, V>>();
-    queue.add(root);
-    var currentNode = queue.removeFirst();
-    do {
-      for (final child in currentNode.children) {
-        queue.add(child);
-      }
-      final result = callback(currentNode);
-      if (result) {
-        currentNode = queue.removeFirst();
-      } else {
-        break;
-      }
-    } while (queue.isNotEmpty);
   }
 }
