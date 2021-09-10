@@ -11,17 +11,13 @@ class ViTraversalBfs<K, V> extends ViTraversal<K, V> {
   traverse(ViNode<K, V> startNode, {required TraversalCall<K, V> callback}) {
     var queue = ListQueue<ViNode<K, V>>();
     queue.add(startNode);
-    var currentNode = queue.removeFirst();
     do {
+      var currentNode = queue.removeFirst();
       for (final child in currentNode.children) {
         queue.add(child);
       }
       final result = callback(currentNode);
-      if (result) {
-        currentNode = queue.removeFirst();
-      } else {
-        break;
-      }
+      if (!result) break;
     } while (queue.isNotEmpty);
   }
 }

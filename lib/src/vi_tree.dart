@@ -2,23 +2,28 @@ part of vi.collection;
 
 class ViOrderedTree<K, V> {
   ViOrderedTree({required K key, required this.traversal, V? data})
-      : root = ViNode<K, V>(key: key, data: data),
+      : _root = ViNode<K, V>(key: key, data: data),
         keys = <K>{key};
 
   ViOrderedTree.fromNode(ViNode<K, V> node, {required this.traversal})
-      : root = node,
-        keys = <K>{} {
-    traversal.traverse(root, callback: (node) {
-      keys.add(node.key);
-      return true;
-    });
+      : keys = <K>{} {
+    setRoot(node);
   }
 
-  final ViNode<K, V> root;
+  ViNode<K, V>? _root;
   Set<K> keys;
   ViTraversal<K, V> traversal;
 
+  ViNode<K, V>? get root => _root;
+
+  void setRoot(ViNode<K, V> node) {
+    _root = node;
+    _fillKeys();
+  }
+
   bool add({required K toKey, required K key, V? data}) {
+    if (_root == null) throw ViOrderedTreeError.noRootNode();
+
     if (keys.contains(key)) return false;
 
     final parent = find(toKey);
@@ -31,19 +36,29 @@ class ViOrderedTree<K, V> {
     return false;
   }
 
-  bool remove(K key) {
+  bool removeByKey(K key) {
+    if (_root == null) throw ViOrderedTreeError.noRootNode();
+
     final parentNode = findParent(key);
     if (parentNode != null) {
       parentNode.children.removeWhere((element) => element.key == key);
       keys.remove(key);
       return true;
+    } else {
+      final rootNode = find(key);
+      if (rootNode != null) {
+        _root = null;
+        return true;
+      }
     }
     return false;
   }
 
   ViNode<K, V>? find(K key) {
+    if (_root == null) throw ViOrderedTreeError.noRootNode();
+
     ViNode<K, V>? element;
-    traversal.traverse(root, callback: (node) {
+    traversal.traverse(_root!, callback: (node) {
       if (node.key == key) {
         element = node;
         return false;
@@ -54,8 +69,10 @@ class ViOrderedTree<K, V> {
   }
 
   ViNode<K, V>? findParent(K key) {
+    if (_root == null) throw ViOrderedTreeError.noRootNode();
+
     ViNode<K, V>? parent;
-    traversal.traverse(root, callback: (node) {
+    traversal.traverse(_root!, callback: (node) {
       final index = node.children.indexWhere((element) => element.key == key);
       if (index != -1) {
         parent = node;
@@ -65,4 +82,15 @@ class ViOrderedTree<K, V> {
     });
     return parent;
   }
+
+  void _fillKeys() {
+    traversal.traverse(_root!, callback: (node) {
+      keys.add(node.key);
+      return true;
+    });
+  }
+}
+
+abstract class ViOrderedTreeError {
+  static StateError noRootNode() => StateError("Root node is null");
 }
