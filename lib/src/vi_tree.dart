@@ -21,19 +21,17 @@ class ViOrderedTree<K, V> {
     _fillKeys();
   }
 
-  bool add({required K toKey, required K key, V? data}) {
+  void add({required K toKey, required K key, V? data}) {
     if (_root == null) throw ViOrderedTreeError.noRootNode();
 
-    if (keys.contains(key)) return false;
+    if (keys.contains(key)) throw ViOrderedTreeError.keyAlreadyExists<K>(key);
 
     final parent = find(toKey);
-    if (parent != null) {
-      final child = ViNode<K, V>(key: key, data: data);
-      parent.children.add(child);
-      keys.add(key);
-      return true;
-    }
-    return false;
+    if (parent == null) throw ViOrderedTreeError.noElement();
+
+    final child = ViNode<K, V>(key: key, data: data);
+    parent.children.add(child);
+    keys.add(key);
   }
 
   bool removeByKey(K key) {
@@ -109,5 +107,8 @@ class ViOrderedTree<K, V> {
 }
 
 abstract class ViOrderedTreeError {
+  static StateError noElement() => StateError("No element");
   static StateError noRootNode() => StateError("Root node is null");
+  static StateError keyAlreadyExists<E>(E key) =>
+      StateError("Key '$key' already exists");
 }

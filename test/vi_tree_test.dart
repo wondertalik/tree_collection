@@ -132,10 +132,11 @@ void main() {
             traversal: ViTraversalBfs<int, dynamic>());
 
         // act
-        final result = tree.add(toKey: 1, key: 20);
+        tree.add(toKey: 1, key: 20);
+        final result = tree.find(20);
 
         // assert
-        expect(result, true);
+        expect(result, isNotNull);
       });
 
       test('Error. No parent to add element to tree', () {
@@ -143,23 +144,17 @@ void main() {
         final tree = ViOrderedTree.fromNode(tRootNode,
             traversal: ViTraversalBfs<int, dynamic>());
 
-        // act
-        final result = tree.add(toKey: 5, key: 20);
-
         // assert
-        expect(result, false);
+        expect(() => tree.add(toKey: 5, key: 20), throwsA(isA<StateError>()));
       });
 
-      test('Error. Key already exist cant add new element', () {
+      test("Error. Key already exist can't add new element", () {
         // arrange
         final tree = ViOrderedTree.fromNode(tRootNode,
             traversal: ViTraversalBfs<int, dynamic>());
 
-        // act
-        final result = tree.add(toKey: 1, key: 3);
-
         // assert
-        expect(result, false);
+        expect(() => tree.add(toKey: 1, key: 3), throwsStateError);
       });
 
       test('Throw ViOrderedTreeError when no root node', () {
