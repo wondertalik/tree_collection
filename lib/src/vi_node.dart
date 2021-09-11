@@ -5,5 +5,7 @@ class ViNode<K, V> {
 
   final K key;
   V? data;
-  List<ViNode<K, V>> children;
+  final List<ViNode<K, V>> children;
+
+  bool get hasChildren => children.isNotEmpty;
 }
