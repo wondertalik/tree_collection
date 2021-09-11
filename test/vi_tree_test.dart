@@ -221,5 +221,57 @@ void main() {
         expect(() => tree.removeByKey(8), throwsStateError);
       });
     });
+
+    group('Traverse tree from node', () {
+      test('Throw ViOrderedTreeError when no root node', () {
+        // arrange
+        final tree = ViOrderedTree.fromNode(ViNode<int, dynamic>(key: 8),
+            traversal: ViTraversalBfs<int, dynamic>());
+        tree.removeByKey(8);
+
+        // assert
+        expect(() => tree.traverseFromNodeByKey(8), throwsStateError);
+      });
+
+      test('Return a list of nodes starting from root, startNode included',
+          () async {
+        // arrange
+        final tree = ViOrderedTree.fromNode(tRootNode,
+            traversal: ViTraversalBfs<int, dynamic>());
+
+        // act
+        final result = tree.traverseFromNodeByKey(tree.root!.key);
+        final keys = result.map((item) => item.key).toSet();
+
+        // assert
+        expect(keys, equals({8, 3, 10, 1, 6, 14, 4, 7, 13}));
+      });
+
+      test('Return a list of nodes starting from 6, startNode included',
+          () async {
+        // arrange
+        final tree = ViOrderedTree.fromNode(tRootNode,
+            traversal: ViTraversalBfs<int, dynamic>());
+
+        // act
+        final result = tree.traverseFromNodeByKey(6);
+        final keys = result.map((item) => item.key).toSet();
+
+        // assert
+        expect(keys, equals({6, 4, 7}));
+      });
+
+      test("Return an empty list if the key doesn't exist", () async {
+        // arrange
+        final tree = ViOrderedTree.fromNode(tRootNode,
+            traversal: ViTraversalBfs<int, dynamic>());
+
+        // act
+        final result = tree.traverseFromNodeByKey(24);
+
+        // assert
+        expect(result.isEmpty, isTrue);
+      });
+    });
   });
 }
