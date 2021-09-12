@@ -256,16 +256,13 @@ void main() {
         expect(keys, equals({6, 4, 7}));
       });
 
-      test("Return an empty list if the key doesn't exist", () async {
+      test("Throw ViOrderedTreeError when key not found", () async {
         // arrange
         final tree = ViOrderedTree.fromNode(tRootNode,
             traversal: ViTraversalBfs<int, dynamic>());
 
-        // act
-        final result = tree.traverseFromNodeByKey(24);
-
         // assert
-        expect(result.isEmpty, isTrue);
+        expect(() => tree.traverseFromNodeByKey(24), throwsA(isA<StateError>()));
       });
     });
   });

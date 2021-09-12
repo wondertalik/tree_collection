@@ -84,16 +84,14 @@ class ViOrderedTree<K, V> {
   Iterable<ViNode<K, V>> traverseFromNodeByKey(K startKey) {
     if (_root == null) throw ViOrderedTreeError.noRootNode();
 
-    final items = <ViNode<K, V>>[];
-
     final startNode = find(startKey);
+    if (startNode == null) throw ViOrderedTreeError.noElement();
 
-    if (startNode != null) {
-      traversal.traverse(startNode, callback: (node) {
-        items.add(node);
-        return true;
-      });
-    }
+    final items = <ViNode<K, V>>[];
+    traversal.traverse(startNode, callback: (node) {
+      items.add(node);
+      return true;
+    });
 
     return items;
   }
