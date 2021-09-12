@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:vi_collection/vi_collection.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('ViNode', () {
