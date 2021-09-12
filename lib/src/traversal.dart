@@ -74,7 +74,8 @@ class TraversalDfsIterativePostOrder<K, V> extends Traversal<K, V> {
 
     do {
       Node<K, V> currentNode = stack.last;
-      if (currentNode.hasChildren && !visited.contains(currentNode)) {
+      final isNotVisited = !visited.contains(currentNode);
+      if (currentNode.hasChildren && isNotVisited) {
         final nodeChildren = direction == TraversalDirection.leftToRight
             ? currentNode.children.reversed
             : currentNode.children;
@@ -84,6 +85,7 @@ class TraversalDfsIterativePostOrder<K, V> extends Traversal<K, V> {
         visited.add(currentNode);
       } else {
         final node = stack.removeLast();
+        if (!isNotVisited) visited.remove(node);
         final result = callback(node);
         if (!result) break;
       }
