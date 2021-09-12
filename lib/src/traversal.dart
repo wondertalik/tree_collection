@@ -1,25 +1,25 @@
-part of vi.collection;
+part of tree.collection;
 
-typedef TraversalCall<K, V> = bool Function(ViNode<K, V> node);
+typedef TraversalCall<K, V> = bool Function(Node<K, V> node);
 
-abstract class ViTraversal<K, V> {
-  ViTraversal({this.direction = TraversalDirection.leftToRight});
+abstract class Traversal<K, V> {
+  Traversal({this.direction = TraversalDirection.leftToRight});
 
   final TraversalDirection direction;
 
-  traverse(ViNode<K, V> startNode, {required TraversalCall<K, V> callback});
+  traverse(Node<K, V> startNode, {required TraversalCall<K, V> callback});
 }
 
 enum TraversalDirection { leftToRight, rightToLeft }
 
-class ViTraversalBfs<K, V> extends ViTraversal<K, V> {
-  ViTraversalBfs({
+class TraversalBfs<K, V> extends Traversal<K, V> {
+  TraversalBfs({
     TraversalDirection direction = TraversalDirection.leftToRight,
   }) : super(direction: direction);
 
   @override
-  traverse(ViNode<K, V> startNode, {required TraversalCall<K, V> callback}) {
-    var queue = ListQueue<ViNode<K, V>>();
+  traverse(Node<K, V> startNode, {required TraversalCall<K, V> callback}) {
+    var queue = ListQueue<Node<K, V>>();
     queue.add(startNode);
     do {
       var currentNode = queue.removeFirst();
@@ -36,14 +36,14 @@ class ViTraversalBfs<K, V> extends ViTraversal<K, V> {
   }
 }
 
-class ViTraversalDfsIterativePreOrder<K, V> extends ViTraversal<K, V> {
-  ViTraversalDfsIterativePreOrder({
+class TraversalDfsIterativePreOrder<K, V> extends Traversal<K, V> {
+  TraversalDfsIterativePreOrder({
     TraversalDirection direction = TraversalDirection.leftToRight,
   }) : super(direction: direction);
 
   @override
-  traverse(ViNode<K, V> startNode, {required TraversalCall<K, V> callback}) {
-    var stack = <ViNode<K, V>>[];
+  traverse(Node<K, V> startNode, {required TraversalCall<K, V> callback}) {
+    var stack = <Node<K, V>>[];
     stack.add(startNode);
     do {
       var currentNode = stack.removeLast();

@@ -1,45 +1,45 @@
-part of vi.collection;
+part of tree.collection;
 
-class ViOrderedTree<K, V> {
-  ViOrderedTree({required K key, required this.traversal, V? data})
-      : _root = ViNode<K, V>(key: key, data: data),
+class OrderedTree<K, V> {
+  OrderedTree({required K key, required this.traversal, V? data})
+      : _root = Node<K, V>(key: key, data: data),
         keys = <K>{key};
 
-  ViOrderedTree.fromNode(ViNode<K, V> node, {required this.traversal})
+  OrderedTree.fromNode(Node<K, V> node, {required this.traversal})
       : keys = <K>{} {
     setRoot(node);
   }
 
-  ViNode<K, V>? _root;
+  Node<K, V>? _root;
   Set<K> keys;
-  ViTraversal<K, V> traversal;
+  Traversal<K, V> traversal;
 
-  ViNode<K, V>? get root => _root;
+  Node<K, V>? get root => _root;
 
-  void setRoot(ViNode<K, V> node) {
+  void setRoot(Node<K, V> node) {
     _root = node;
     _fillKeys();
   }
 
-  void setTraversal(ViTraversal<K, V> traversal) {
+  void setTraversal(Traversal<K, V> traversal) {
     this.traversal = traversal;
   }
 
   void add({required K toKey, required K key, V? data}) {
-    if (_root == null) throw ViOrderedTreeError.noRootNode();
+    if (_root == null) throw OrderedTreeError.noRootNode();
 
-    if (keys.contains(key)) throw ViOrderedTreeError.keyAlreadyExists<K>(key);
+    if (keys.contains(key)) throw OrderedTreeError.keyAlreadyExists<K>(key);
 
     final parent = find(toKey);
-    if (parent == null) throw ViOrderedTreeError.noElement();
+    if (parent == null) throw OrderedTreeError.noElement();
 
-    final child = ViNode<K, V>(key: key, data: data);
+    final child = Node<K, V>(key: key, data: data);
     parent.children.add(child);
     keys.add(key);
   }
 
   bool removeByKey(K key) {
-    if (_root == null) throw ViOrderedTreeError.noRootNode();
+    if (_root == null) throw OrderedTreeError.noRootNode();
 
     final parentNode = findParent(key);
     if (parentNode != null) {
@@ -56,10 +56,10 @@ class ViOrderedTree<K, V> {
     return false;
   }
 
-  ViNode<K, V>? find(K key) {
-    if (_root == null) throw ViOrderedTreeError.noRootNode();
+  Node<K, V>? find(K key) {
+    if (_root == null) throw OrderedTreeError.noRootNode();
 
-    ViNode<K, V>? element;
+    Node<K, V>? element;
     traversal.traverse(_root!, callback: (node) {
       if (node.key == key) {
         element = node;
@@ -70,10 +70,10 @@ class ViOrderedTree<K, V> {
     return element;
   }
 
-  ViNode<K, V>? findParent(K key) {
-    if (_root == null) throw ViOrderedTreeError.noRootNode();
+  Node<K, V>? findParent(K key) {
+    if (_root == null) throw OrderedTreeError.noRootNode();
 
-    ViNode<K, V>? parent;
+    Node<K, V>? parent;
     traversal.traverse(_root!, callback: (node) {
       final index = node.children.indexWhere((element) => element.key == key);
       if (index != -1) {
@@ -85,13 +85,13 @@ class ViOrderedTree<K, V> {
     return parent;
   }
 
-  Iterable<ViNode<K, V>> traverseFromNodeByKey(K startKey) {
-    if (_root == null) throw ViOrderedTreeError.noRootNode();
+  Iterable<Node<K, V>> traverseFromNodeByKey(K startKey) {
+    if (_root == null) throw OrderedTreeError.noRootNode();
 
     final startNode = find(startKey);
-    if (startNode == null) throw ViOrderedTreeError.noElement();
+    if (startNode == null) throw OrderedTreeError.noElement();
 
-    final items = <ViNode<K, V>>[];
+    final items = <Node<K, V>>[];
     traversal.traverse(startNode, callback: (node) {
       items.add(node);
       print(node.key);
@@ -109,7 +109,7 @@ class ViOrderedTree<K, V> {
   }
 }
 
-abstract class ViOrderedTreeError {
+abstract class OrderedTreeError {
   static StateError noElement() => StateError("No element");
   static StateError noRootNode() => StateError("Root node is null");
   static StateError keyAlreadyExists<E>(E key) =>

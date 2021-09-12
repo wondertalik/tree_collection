@@ -1,22 +1,22 @@
 import 'package:test/test.dart';
-import 'package:vi_collection/vi_collection.dart';
+import 'package:tree_collection/tree_collection.dart';
 
 void main() {
-  late ViNode<int, dynamic> tRootNode;
+  late Node<int, dynamic> tRootNode;
 
   setUp(() {
-    tRootNode = ViNode(key: 8)
+    tRootNode = Node(key: 8)
       ..children.addAll([
-        ViNode(key: 3)
+        Node(key: 3)
           ..children.addAll([
-            ViNode(key: 1),
-            ViNode(key: 6)
-              ..children.add(ViNode(key: 4))
-              ..children.add(ViNode(key: 7))
+            Node(key: 1),
+            Node(key: 6)
+              ..children.add(Node(key: 4))
+              ..children.add(Node(key: 7))
           ]),
-        ViNode(key: 10)
+        Node(key: 10)
           ..children.add(
-            ViNode(key: 14)..children.add(ViNode(key: 13)),
+            Node(key: 14)..children.add(Node(key: 13)),
           )
       ]);
   });
@@ -25,35 +25,35 @@ void main() {
     group('Constructors test', () {
       test('Default constructor', () {
         // act
-        final tree = ViOrderedTree<int, dynamic>(
-            key: 1, traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree<int, dynamic>(
+            key: 1, traversal: TraversalBfs<int, dynamic>());
 
         // assert
         expect(tree.keys, equals({1}));
-        expect(tree.root, isA<ViNode<int, dynamic>>());
+        expect(tree.root, isA<Node<int, dynamic>>());
       });
 
       test('OrderedTree.fromNode', () {
         // act
-        final tree = ViOrderedTree<int, dynamic>.fromNode(
-          ViNode(key: 8)
+        final tree = OrderedTree<int, dynamic>.fromNode(
+          Node(key: 8)
             ..children.add(
-              ViNode(key: 1),
+              Node(key: 1),
             ),
-          traversal: ViTraversalBfs<int, dynamic>(),
+          traversal: TraversalBfs<int, dynamic>(),
         );
 
         // assert
         expect(tree.keys, equals({1, 8}));
-        expect(tree.root, isA<ViNode<int, dynamic>>());
+        expect(tree.root, isA<Node<int, dynamic>>());
       });
     });
 
     group('Find elements in tree', () {
       test('Should return node with key 7', () {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // act
         final result = tree.find(7);
@@ -64,8 +64,8 @@ void main() {
 
       test('Should return null', () {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // act
         final result = tree.find(15);
@@ -77,8 +77,8 @@ void main() {
       group('Find parent in tree', () {
         test('Parent of 14 is 10', () {
           // arrange
-          final tree = ViOrderedTree.fromNode(tRootNode,
-              traversal: ViTraversalBfs<int, dynamic>());
+          final tree = OrderedTree.fromNode(tRootNode,
+              traversal: TraversalBfs<int, dynamic>());
 
           // act
           final result = tree.findParent(14);
@@ -90,8 +90,8 @@ void main() {
 
         test('Parent of 13 is 14', () {
           // arrange
-          final tree = ViOrderedTree.fromNode(tRootNode,
-              traversal: ViTraversalBfs<int, dynamic>());
+          final tree = OrderedTree.fromNode(tRootNode,
+              traversal: TraversalBfs<int, dynamic>());
 
           // act
           final result = tree.findParent(13);
@@ -103,8 +103,8 @@ void main() {
 
         test('Parent not found', () {
           // arrange
-          final tree = ViOrderedTree.fromNode(tRootNode,
-              traversal: ViTraversalBfs<int, dynamic>());
+          final tree = OrderedTree.fromNode(tRootNode,
+              traversal: TraversalBfs<int, dynamic>());
 
           // act
           final result = tree.findParent(20);
@@ -113,10 +113,10 @@ void main() {
           expect(result, isNull);
         });
 
-        test('Throw ViOrderedTreeError when no root node', () {
+        test('Throw OrderedTreeError when no root node', () {
           // arrange
-          final tree = ViOrderedTree.fromNode(ViNode<int, dynamic>(key: 8),
-              traversal: ViTraversalBfs<int, dynamic>());
+          final tree = OrderedTree.fromNode(Node<int, dynamic>(key: 8),
+              traversal: TraversalBfs<int, dynamic>());
           tree.removeByKey(8);
 
           // assert
@@ -128,8 +128,8 @@ void main() {
     group('Add elements to tree', () {
       test('Add element to tree was success', () {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // act
         tree.add(toKey: 1, key: 20);
@@ -141,8 +141,8 @@ void main() {
 
       test('Error. No parent to add element to tree', () {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // assert
         expect(() => tree.add(toKey: 5, key: 20), throwsA(isA<StateError>()));
@@ -150,17 +150,17 @@ void main() {
 
       test("Error. Key already exist can't add new element", () {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // assert
         expect(() => tree.add(toKey: 1, key: 3), throwsStateError);
       });
 
-      test('Throw ViOrderedTreeError when no root node', () {
+      test('Throw OrderedTreeError when no root node', () {
         // arrange
-        final tree = ViOrderedTree.fromNode(ViNode<int, dynamic>(key: 8),
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(Node<int, dynamic>(key: 8),
+            traversal: TraversalBfs<int, dynamic>());
         tree.removeByKey(8);
 
         // assert
@@ -171,8 +171,8 @@ void main() {
     group('Remove element from tree', () {
       test('Key is of root node', () async {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // act
         final result = tree.removeByKey(8);
@@ -184,8 +184,8 @@ void main() {
 
       test('Key is of node without children', () async {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // act
         final result = tree.removeByKey(13);
@@ -196,8 +196,8 @@ void main() {
 
       test('Key is of node with children', () async {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // act
         final result = tree.removeByKey(6);
@@ -206,10 +206,10 @@ void main() {
         expect(result, true);
       });
 
-      test('Throw ViOrderedTreeError when no root node', () {
+      test('Throw OrderedTreeError when no root node', () {
         // arrange
-        final tree = ViOrderedTree.fromNode(ViNode<int, dynamic>(key: 8),
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(Node<int, dynamic>(key: 8),
+            traversal: TraversalBfs<int, dynamic>());
         tree.removeByKey(8);
 
         // assert
@@ -218,10 +218,10 @@ void main() {
     });
 
     group('Traverse tree from node', () {
-      test('Throw ViOrderedTreeError when no root node', () {
+      test('Throw OrderedTreeError when no root node', () {
         // arrange
-        final tree = ViOrderedTree.fromNode(ViNode<int, dynamic>(key: 8),
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(Node<int, dynamic>(key: 8),
+            traversal: TraversalBfs<int, dynamic>());
         tree.removeByKey(8);
 
         // assert
@@ -231,8 +231,8 @@ void main() {
       test('Return a list of nodes starting from root, startNode included',
           () async {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // act
         final result = tree.traverseFromNodeByKey(tree.root!.key);
@@ -245,8 +245,8 @@ void main() {
       test('Return a list of nodes starting from 6, startNode included',
           () async {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // act
         final result = tree.traverseFromNodeByKey(6);
@@ -256,10 +256,10 @@ void main() {
         expect(keys, equals({6, 4, 7}));
       });
 
-      test("Throw ViOrderedTreeError when key not found", () async {
+      test("Throw OrderedTreeError when key not found", () async {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // assert
         expect(
@@ -268,18 +268,18 @@ void main() {
     });
 
     group('Change traversal', () {
-      test('Change from ViTraversalBfs to ViTraversalDfsIterativePreOrder',
+      test('Change from TraversalBfs to TraversalDfsIterativePreOrder',
           () async {
         // arrange
-        final tree = ViOrderedTree.fromNode(tRootNode,
-            traversal: ViTraversalBfs<int, dynamic>());
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
 
         // act
-        tree.setTraversal(ViTraversalDfsIterativePreOrder<int, dynamic>());
+        tree.setTraversal(TraversalDfsIterativePreOrder<int, dynamic>());
 
         // assert
         expect(tree.traversal,
-            isA<ViTraversalDfsIterativePreOrder<int, dynamic>>());
+            isA<TraversalDfsIterativePreOrder<int, dynamic>>());
       });
     });
   });

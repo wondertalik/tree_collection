@@ -1,31 +1,31 @@
 import 'package:test/test.dart';
-import 'package:vi_collection/vi_collection.dart';
+import 'package:tree_collection/tree_collection.dart';
 
 void main() {
-  late ViNode<int, dynamic> tRootNode;
+  late Node<int, dynamic> tRootNode;
 
   setUp(() {
-    tRootNode = ViNode(key: 8)
+    tRootNode = Node(key: 8)
       ..children.addAll([
-        ViNode(key: 3)
+        Node(key: 3)
           ..children.addAll([
-            ViNode(key: 1),
-            ViNode(key: 6)
-              ..children.add(ViNode(key: 4))
-              ..children.add(ViNode(key: 7))
+            Node(key: 1),
+            Node(key: 6)
+              ..children.add(Node(key: 4))
+              ..children.add(Node(key: 7))
           ]),
-        ViNode(key: 10)
+        Node(key: 10)
           ..children.add(
-            ViNode(key: 14)..children.add(ViNode(key: 13)),
+            Node(key: 14)..children.add(Node(key: 13)),
           )
       ]);
   });
 
-  group('ViTraversalBfs', () {
+  group('TraversalBfs', () {
     test('Check order traversal Left to Right', () async {
       // arrange
-      final tree = ViOrderedTree.fromNode(tRootNode,
-          traversal: ViTraversalBfs<int, dynamic>());
+      final tree = OrderedTree.fromNode(tRootNode,
+          traversal: TraversalBfs<int, dynamic>());
 
       // act
       final result = tree.traverseFromNodeByKey(tree.root!.key);
@@ -39,8 +39,8 @@ void main() {
 
     test('Check order traversal Right to Left', () async {
       // arrange
-      final tree = ViOrderedTree.fromNode(tRootNode,
-          traversal: ViTraversalBfs<int, dynamic>(
+      final tree = OrderedTree.fromNode(tRootNode,
+          traversal: TraversalBfs<int, dynamic>(
             direction: TraversalDirection.rightToLeft,
           ));
 
@@ -55,11 +55,11 @@ void main() {
     });
   });
 
-  group('ViTraversalDfsIterativePreOrder', () {
+  group('TraversalDfsIterativePreOrder', () {
     test('Check order traversal Left to Right', () async {
       // arrange
-      final tree = ViOrderedTree.fromNode(tRootNode,
-          traversal: ViTraversalDfsIterativePreOrder<int, dynamic>());
+      final tree = OrderedTree.fromNode(tRootNode,
+          traversal: TraversalDfsIterativePreOrder<int, dynamic>());
 
       // act
       final result = tree.traverseFromNodeByKey(tree.root!.key);
@@ -70,8 +70,8 @@ void main() {
 
     test('Check order traversal Right to Left', () async {
       // arrange
-      final tree = ViOrderedTree.fromNode(tRootNode,
-          traversal: ViTraversalDfsIterativePreOrder<int, dynamic>(
+      final tree = OrderedTree.fromNode(tRootNode,
+          traversal: TraversalDfsIterativePreOrder<int, dynamic>(
             direction: TraversalDirection.rightToLeft,
           ));
 
