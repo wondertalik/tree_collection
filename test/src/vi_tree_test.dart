@@ -262,7 +262,24 @@ void main() {
             traversal: ViTraversalBfs<int, dynamic>());
 
         // assert
-        expect(() => tree.traverseFromNodeByKey(24), throwsA(isA<StateError>()));
+        expect(
+            () => tree.traverseFromNodeByKey(24), throwsA(isA<StateError>()));
+      });
+    });
+
+    group('Change traversal', () {
+      test('Change from ViTraversalBfs to ViTraversalDfsIterativePreOrder',
+          () async {
+        // arrange
+        final tree = ViOrderedTree.fromNode(tRootNode,
+            traversal: ViTraversalBfs<int, dynamic>());
+
+        // act
+        tree.setTraversal(ViTraversalDfsIterativePreOrder<int, dynamic>());
+
+        // assert
+        expect(tree.traversal,
+            isA<ViTraversalDfsIterativePreOrder<int, dynamic>>());
       });
     });
   });

@@ -21,6 +21,10 @@ class ViOrderedTree<K, V> {
     _fillKeys();
   }
 
+  void setTraversal(ViTraversal<K, V> traversal) {
+    this.traversal = traversal;
+  }
+
   void add({required K toKey, required K key, V? data}) {
     if (_root == null) throw ViOrderedTreeError.noRootNode();
 
@@ -90,6 +94,7 @@ class ViOrderedTree<K, V> {
     final items = <ViNode<K, V>>[];
     traversal.traverse(startNode, callback: (node) {
       items.add(node);
+      print(node.key);
       return true;
     });
 
