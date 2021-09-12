@@ -59,3 +59,34 @@ class TraversalDfsIterativePreOrder<K, V> extends Traversal<K, V> {
     } while (stack.isNotEmpty);
   }
 }
+
+class TraversalDfsIterativePostOrder<K, V> extends Traversal<K, V> {
+  TraversalDfsIterativePostOrder({
+    TraversalDirection direction = TraversalDirection.leftToRight,
+  }) : super(direction: direction);
+
+  @override
+  traverse(Node<K, V> startNode, {required TraversalCall<K, V> callback}) {
+    final visited = <Node<K, V>>[];
+
+    final stack = <Node<K, V>>[];
+    stack.add(startNode);
+
+    do {
+      Node<K, V> currentNode = stack.last;
+      if (currentNode.hasChildren && !visited.contains(currentNode)) {
+        final nodeChildren = direction == TraversalDirection.leftToRight
+            ? currentNode.children.reversed
+            : currentNode.children;
+        for (final child in nodeChildren) {
+          stack.add(child);
+        }
+        visited.add(currentNode);
+      } else {
+        final node = stack.removeLast();
+        final result = callback(node);
+        if (!result) break;
+      }
+    } while (stack.isNotEmpty);
+  }
+}

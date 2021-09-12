@@ -94,7 +94,6 @@ class OrderedTree<K, V> {
     final items = <Node<K, V>>[];
     traversal.traverse(startNode, callback: (node) {
       items.add(node);
-      print(node.key);
       return true;
     });
 
