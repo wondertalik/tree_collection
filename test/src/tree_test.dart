@@ -139,6 +139,22 @@ void main() {
         expect(result, isNotNull);
       });
 
+      test('Add element and sorting to tree was success', () {
+        // arrange
+        final tree = OrderedTree.fromNode(tRootNode,
+            traversal: TraversalBfs<int, dynamic>());
+
+        // act
+        tree.add(
+            toKey: 6, key: 5, comparator: (a, b) => a.key.compareTo(b.key));
+        final result = tree.find(5);
+
+        // assert
+        expect(result, isNotNull);
+        expect(tree.find(6)!.children.map((e) => e.key).toList(), equals([4, 5, 7]));
+
+      });
+
       test('Error. No parent to add element to tree', () {
         // arrange
         final tree = OrderedTree.fromNode(tRootNode,
@@ -278,8 +294,8 @@ void main() {
         tree.setTraversal(TraversalDfsIterativePreOrder<int, dynamic>());
 
         // assert
-        expect(tree.traversal,
-            isA<TraversalDfsIterativePreOrder<int, dynamic>>());
+        expect(
+            tree.traversal, isA<TraversalDfsIterativePreOrder<int, dynamic>>());
       });
     });
   });

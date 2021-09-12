@@ -25,7 +25,7 @@ class OrderedTree<K, V> {
     this.traversal = traversal;
   }
 
-  void add({required K toKey, required K key, V? data}) {
+  void add({required K toKey, required K key, V? data, Comparator<Node<K, V>>? comparator}) {
     if (_root == null) throw OrderedTreeError.noRootNode();
 
     if (keys.contains(key)) throw OrderedTreeError.keyAlreadyExists<K>(key);
@@ -35,6 +35,7 @@ class OrderedTree<K, V> {
 
     final child = Node<K, V>(key: key, data: data);
     parent.children.add(child);
+    parent.children.sort(comparator);
     keys.add(key);
   }
 
