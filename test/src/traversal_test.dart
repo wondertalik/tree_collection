@@ -28,13 +28,15 @@ void main() {
           traversal: TraversalBfs<int, dynamic>());
 
       // act
-      final result = tree.traverseFromNodeByKey(tree.root!.key);
-
+      final keys = <int>[];
+      tree.traverseFromNode(
+          key: tree.root!.key,
+          callback: (node) {
+            keys.add(node.key);
+            return true;
+          });
       // assert
-      expect(
-        result.map((x) => x.key).toList(),
-        [8, 10, 3, 14, 6, 1, 13, 7, 4],
-      );
+      expect(keys, [8, 10, 3, 14, 6, 1, 13, 7, 4]);
     });
 
     test('Check order traversal Right to Left', () async {
@@ -45,13 +47,15 @@ void main() {
           ));
 
       // act
-      final result = tree.traverseFromNodeByKey(tree.root!.key);
-
+      final keys = <int>[];
+      tree.traverseFromNode(
+          key: tree.root!.key,
+          callback: (node) {
+            keys.add(node.key);
+            return true;
+          });
       // assert
-      expect(
-        result.map((x) => x.key).toList(),
-        [8, 3, 10, 1, 6, 14, 4, 7, 13],
-      );
+      expect(keys, [8, 3, 10, 1, 6, 14, 4, 7, 13]);
     });
   });
 
@@ -62,10 +66,16 @@ void main() {
           traversal: TraversalDfsIterativePreOrder<int, dynamic>());
 
       // act
-      final result = tree.traverseFromNodeByKey(tree.root!.key);
+      final keys = <int>[];
+      tree.traverseFromNode(
+          key: tree.root!.key,
+          callback: (node) {
+            keys.add(node.key);
+            return true;
+          });
 
       // assert
-      expect(result.map((x) => x.key).toList(), [8, 3, 1, 6, 4, 7, 10, 14, 13]);
+      expect(keys, [8, 3, 1, 6, 4, 7, 10, 14, 13]);
     });
 
     test('Check order traversal Right to Left', () async {
@@ -76,10 +86,16 @@ void main() {
           ));
 
       // act
-      final result = tree.traverseFromNodeByKey(tree.root!.key);
+      final keys = <int>[];
+      tree.traverseFromNode(
+          key: tree.root!.key,
+          callback: (node) {
+            keys.add(node.key);
+            return true;
+          });
 
       // assert
-      expect(result.map((x) => x.key).toList(), [8, 10, 14, 13, 3, 6, 7, 4, 1]);
+      expect(keys, [8, 10, 14, 13, 3, 6, 7, 4, 1]);
     });
   });
 
@@ -90,10 +106,16 @@ void main() {
           traversal: TraversalDfsIterativePostOrder<int, dynamic>());
 
       // act
-      final result = tree.traverseFromNodeByKey(tree.root!.key);
+      final keys = <int>[];
+      tree.traverseFromNode(
+          key: tree.root!.key,
+          callback: (node) {
+            keys.add(node.key);
+            return true;
+          });
 
       // assert
-      expect(result.map((x) => x.key).toList(), [1, 4, 7, 6, 3, 13, 14, 10, 8]);
+      expect(keys, [1, 4, 7, 6, 3, 13, 14, 10, 8]);
     });
 
     test('Check order traversal Right to Left', () async {
@@ -104,10 +126,16 @@ void main() {
           ));
 
       // act
-      final result = tree.traverseFromNodeByKey(tree.root!.key);
+      final keys = <int>[];
+      tree.traverseFromNode(
+          key: tree.root!.key,
+          callback: (node) {
+            keys.add(node.key);
+            return true;
+          });
 
       // assert
-      expect(result.map((x) => x.key).toList(), [13, 14, 10, 7, 4, 6, 1, 3, 8]);
+      expect(keys, [13, 14, 10, 7, 4, 6, 1, 3, 8]);
     });
   });
 }

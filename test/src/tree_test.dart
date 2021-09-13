@@ -237,7 +237,10 @@ void main() {
         tree.removeByKey(8);
 
         // assert
-        expect(() => tree.traverseFromNodeByKey(8), throwsStateError);
+        expect(
+            () => tree.traverseFromNode(
+                key: 8, callback: (node) => true),
+            throwsStateError);
       });
 
       test('Return a list of nodes starting from root, startNode included',
@@ -247,8 +250,13 @@ void main() {
             traversal: TraversalBfs<int, dynamic>());
 
         // act
-        final result = tree.traverseFromNodeByKey(tree.root!.key);
-        final keys = result.map((item) => item.key).toSet();
+        final keys = <int>{};
+        tree.traverseFromNode(
+            key: tree.root!.key,
+            callback: (node) {
+              keys.add(node.key);
+              return true;
+            });
 
         // assert
         expect(keys, equals({8, 3, 10, 1, 6, 14, 4, 7, 13}));
@@ -261,8 +269,13 @@ void main() {
             traversal: TraversalBfs<int, dynamic>());
 
         // act
-        final result = tree.traverseFromNodeByKey(6);
-        final keys = result.map((item) => item.key).toSet();
+        final keys = <int>{};
+        tree.traverseFromNode(
+            key:6,
+            callback: (node) {
+              keys.add(node.key);
+              return true;
+            });
 
         // assert
         expect(keys, equals({6, 4, 7}));
@@ -275,7 +288,9 @@ void main() {
 
         // assert
         expect(
-            () => tree.traverseFromNodeByKey(24), throwsA(isA<StateError>()));
+            () => tree.traverseFromNode(
+                key: 24, callback: (node) => true),
+            throwsA(isA<StateError>()));
       });
     });
 

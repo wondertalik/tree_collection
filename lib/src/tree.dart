@@ -25,7 +25,12 @@ class OrderedTree<K, V> {
     this.traversal = traversal;
   }
 
-  void add({required K toKey, required K key, V? data, Comparator<Node<K, V>>? comparator}) {
+  void add({
+    required K toKey,
+    required K key,
+    V? data,
+    Comparator<Node<K, V>>? comparator,
+  }) {
     if (_root == null) throw OrderedTreeError.noRootNode();
 
     if (keys.contains(key)) throw OrderedTreeError.keyAlreadyExists<K>(key);
@@ -86,19 +91,18 @@ class OrderedTree<K, V> {
     return parent;
   }
 
-  Iterable<Node<K, V>> traverseFromNodeByKey(K startKey) {
+  void traverseFromNode({
+    required K key,
+    required TraversalCall<K, V> callback,
+    Traversal<K, V>? traversal,
+  }) {
     if (_root == null) throw OrderedTreeError.noRootNode();
 
-    final startNode = find(startKey);
+    final startNode = find(key);
     if (startNode == null) throw OrderedTreeError.noElement();
 
-    final items = <Node<K, V>>[];
-    traversal.traverse(startNode, callback: (node) {
-      items.add(node);
-      return true;
-    });
-
-    return items;
+    final finalTraversal = traversal ?? this.traversal;
+    finalTraversal.traverse(startNode, callback: callback);
   }
 
   void _fillKeys() {
