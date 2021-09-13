@@ -131,12 +131,8 @@ void main() {
         final tree = OrderedTree.fromNode(tRootNode,
             traversal: TraversalBfs<int, dynamic>());
 
-        // act
-        tree.add(toKey: 1, key: 20);
-        final result = tree.find(20);
-
         // assert
-        expect(result, isNotNull);
+        expect(() => tree.add(toKey: 1, key: 20), returnsNormally);
       });
 
       test('Add element and sorting to tree was success', () {
@@ -151,8 +147,8 @@ void main() {
 
         // assert
         expect(result, isNotNull);
-        expect(tree.find(6)!.children.map((e) => e.key).toList(), equals([4, 5, 7]));
-
+        expect(tree.find(6)!.children.map((e) => e.key).toList(),
+            equals([4, 5, 7]));
       });
 
       test('Error. No parent to add element to tree', () {
