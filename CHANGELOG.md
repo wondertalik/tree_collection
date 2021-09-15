@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/wondertalik/tree_collection/compare/v1.0.1...v2.0.0) (2021-09-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* add equatable as dependency
+
+### Features
+
+* add equatable as dependency ([fa83157](https://github.com/wondertalik/tree_collection/commit/fa83157c523d0f3c0a7d9e418212854044f47526))
+
 ### [1.0.1](https://github.com/wondertalik/tree_collection/compare/v1.0.0...v1.0.1) (2021-09-13)
 
 ## 1.0.0 (2021-09-13)

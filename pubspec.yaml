@@ -1,5 +1,5 @@
 name: tree_collection
-version: 1.0.1
+version: 2.0.0
 description: A dart package that help works with tree structure
 repository: https://github.com/wondertalik/tree_collection
 environment:
