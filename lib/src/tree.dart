@@ -3,18 +3,19 @@ part of tree.collection;
 class OrderedTree<K, V> {
   OrderedTree({required K key, required this.traversal, V? data})
       : _root = Node<K, V>(key: key, data: data),
-        keys = <K>{key};
+        _keys = <K>{key};
 
   OrderedTree.fromNode(Node<K, V> node, {required this.traversal})
-      : keys = <K>{} {
+      : _keys = <K>{} {
     setRoot(node);
   }
 
   Node<K, V>? _root;
-  Set<K> keys;
+  final Set<K> _keys;
   Traversal<K, V> traversal;
 
   Node<K, V>? get root => _root;
+  Set<K> get keys => _keys;
 
   void setRoot(Node<K, V> node) {
     _root = node;
@@ -33,7 +34,7 @@ class OrderedTree<K, V> {
   }) {
     if (_root == null) throw OrderedTreeError.noRootNode();
 
-    if (keys.contains(key)) throw OrderedTreeError.keyAlreadyExists<K>(key);
+    if (_keys.contains(key)) throw OrderedTreeError.keyAlreadyExists<K>(key);
 
     final parent = find(toKey);
     if (parent == null) throw OrderedTreeError.noElement();
@@ -41,7 +42,7 @@ class OrderedTree<K, V> {
     final child = Node<K, V>(key: key, data: data);
     parent.children.add(child);
     parent.children.sort(comparator);
-    keys.add(key);
+    _keys.add(key);
   }
 
   bool removeByKey(K key) {
@@ -50,7 +51,7 @@ class OrderedTree<K, V> {
     final parentNode = findParent(key);
     if (parentNode != null) {
       parentNode.children.removeWhere((element) => element.key == key);
-      keys.remove(key);
+      _keys.remove(key);
       return true;
     } else {
       final rootNode = find(key);
@@ -107,7 +108,7 @@ class OrderedTree<K, V> {
 
   void _fillKeys() {
     traversal.traverse(_root!, callback: (node) {
-      keys.add(node.key);
+      _keys.add(node.key);
       return true;
     });
   }
