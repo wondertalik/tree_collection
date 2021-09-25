@@ -41,7 +41,7 @@ class OrderedTree<K, V> {
 
     final child = Node<K, V>(key: key, data: data);
     parent.children.add(child);
-    parent.children.sort(comparator);
+    if (comparator != null) parent.children.sort(comparator);
     _keys.add(key);
   }
 
